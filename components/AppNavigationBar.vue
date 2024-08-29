@@ -1,0 +1,72 @@
+<template>
+    <aside v-if="isDesktop">
+        <UVerticalNavigation
+            :links="links"
+            :ui="{
+                wrapper: 'min-w-52 min-h-full px-3 py-4',
+                base: 'mb-2',
+                size: 'text-base',
+                padding: 'p-2',
+            }"
+        />
+    </aside>
+    <div v-if="isMobileOrTablet">
+        <header class="h-16 w-full flex justify-end items-center px-2">
+            <UButton
+                color="white"
+                size="lg"
+                icon="heroicons:bars-3-bottom-right-20-solid"
+                class="m-2"
+                :ui="{
+                    base: 'w-10 h-10',
+                }"
+                @click="isOpen = true"
+            />
+        </header>
+        <USlideover v-model="isOpen">
+            <div class="p-4 flex-1">
+                <UButton
+                    color="white"
+                    size="lg"
+                    icon="i-heroicons-x-mark-20-solid"
+                    class="flex absolute end-5 top-5 z-10"
+                    @click="isOpen = false"
+                />
+                <UVerticalNavigation
+                    :links="links"
+                    :ui="{
+                        wrapper: 'min-w-52 min-h-full px-3 py-16',
+                        base: 'mb-2',
+                        size: 'text-base',
+                        padding: 'p-5',
+                    }"
+                />
+            </div>
+        </USlideover>
+    </div>
+</template>
+
+<script setup lang="ts">
+const { isDesktop, isMobileOrTablet } = useDevice();
+const isOpen = ref(false);
+
+const closeModal = (isOpen.value = false);
+
+const links = [
+    {
+        label: "Home",
+        to: "/",
+        click: isMobileOrTablet ? () => closeModal() : null,
+    },
+    {
+        label: "About",
+        to: "/about",
+        click: isMobileOrTablet ? () => closeModal() : null,
+    },
+    {
+        label: "Settings",
+        to: "/settings",
+        click: isMobileOrTablet ? () => closeModal() : null,
+    },
+];
+</script>
