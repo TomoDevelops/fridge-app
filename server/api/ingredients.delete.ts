@@ -3,16 +3,19 @@ import { supabase } from "~/server/utils/supabase";
 export default defineEventHandler(async (event) => {
   const query = getQuery(event);
   const userId = query.userId;
+  const ingredientsToDelete = Array.isArray(query.ingredientsToDelete)
+    ? query.ingredientsToDelete
+    : [query.ingredientsToDelete];
 
   try {
-    const ingredients = await supabase
+    await supabase
       .from("ingredients")
-      .select("ingredientId:ingredient_id,ingredient,quantity,unit")
+      .delete()
+      .in("ingredient_id", ingredientsToDelete)
       .eq("user_id", userId);
 
-    return {
-      ingredients: ingredients.data as Ingredient[],
-    };
+    setResponseStatus(event, 200);
+    return { success: true };
   } catch (err: unknown) {
     if (err instanceof Error) {
       throw createError({

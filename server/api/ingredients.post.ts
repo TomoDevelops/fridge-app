@@ -17,7 +17,7 @@ export default defineEventHandler(async (event) => {
 
     const ingredients = await supabase
       .from("ingredients")
-      .select("ingredient,quantity,unit")
+      .select("ingredientId:ingredient_id,ingredient,quantity,unit")
       .eq("user_id", userId);
 
     return {
