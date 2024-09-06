@@ -62,8 +62,8 @@ const links = [
       : undefined,
   },
   {
-    label: "About",
-    to: "/about",
+    label: "レシピ",
+    to: "/recipe",
     click: isMobileOrTablet
       ? () => {
           isOpen.value = false;
