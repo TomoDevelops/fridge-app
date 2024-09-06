@@ -102,20 +102,24 @@ const links = ref([
   ],
 ]);
 
-watch(sessionCookie, () => {
-  isLoggedIn.value = !isLoggedIn.value;
+watch(
+  sessionCookie,
+  () => {
+    isLoggedIn.value = !isLoggedIn.value;
 
-  if (isLoggedIn.value) {
-    links.value.push([
-      {
-        label: "ログアウト",
-        icon: "i-heroicons-arrow-left-start-on-rectangle",
-        click: signOut,
-      },
-    ]);
-  }
-  if (!isLoggedIn.value) {
-    links.value.pop();
-  }
-});
+    if (isLoggedIn.value) {
+      links.value.push([
+        {
+          label: "ログアウト",
+          icon: "i-heroicons-arrow-left-start-on-rectangle",
+          click: signOut,
+        },
+      ]);
+    }
+    if (!isLoggedIn.value) {
+      links.value.pop();
+    }
+  },
+  { immediate: true },
+);
 </script>
