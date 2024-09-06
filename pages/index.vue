@@ -74,7 +74,7 @@ import { useIngredients } from "~/composables/useIngredients";
 import { z } from "zod";
 
 const isOpen = ref(false);
-const ingredients = ref<Ingredient[] | undefined>(await useIngredients(1));
+const ingredients = ref<Ingredient[] | undefined>(await useIngredients());
 const selectedIngredient = ref<Ingredient[]>([]);
 
 const tableColumns = [
@@ -96,17 +96,16 @@ const state = reactive({
 });
 
 const onSubmit = async () => {
-  const { data } = await useFetch("/api/ingredients", {
+  const data = await $fetch("/api/ingredients", {
     method: "POST",
     query: {
-      userId: 1,
       ingredient: state.ingredient,
       quantity: state.quantity,
       unit: state.unit,
     },
   });
 
-  ingredients.value = data.value?.ingredients;
+  ingredients.value = data.ingredients;
 
   Object.assign(state, {
     ingredient: undefined,
@@ -122,14 +121,14 @@ const onDelete = async () => {
     (ingredient) => ingredient.ingredientId,
   );
 
-  await useFetch("/api/ingredients", {
+  await $fetch("/api/ingredients", {
     method: "DELETE",
     query: {
-      userId: 1,
       ingredientsToDelete: ingredientsToDelete,
     },
   });
-  ingredients.value = await useIngredients(1);
+
+  ingredients.value = await useIngredients();
 };
 
 const select = (row: Ingredient) => {
