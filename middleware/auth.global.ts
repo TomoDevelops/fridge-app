@@ -1,14 +1,20 @@
 export default defineNuxtRouteMiddleware((to, _from) => {
   const sessionCookie = useCookie("session");
 
+  // No session cookie
   if (!sessionCookie.value) {
-    if (to.path !== "/signin") {
+    // Not going to signin or signup
+    if (to.path !== "/signin" && to.path !== "/signup") {
+      // Force navigate to signin
       return navigateTo("/signin");
     }
   }
 
+  // Has session cookie
   if (sessionCookie.value) {
-    if (to.path === "/signin") {
+    // Going to signin or signup
+    if (to.path === "/signin" || to.path === "/signup") {
+      // Force navigate to home
       return navigateTo("/");
     }
   }
