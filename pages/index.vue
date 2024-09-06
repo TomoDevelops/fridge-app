@@ -128,6 +128,7 @@ const onDelete = async () => {
     },
   });
 
+  selectedIngredient.value = [];
   ingredients.value = await useIngredients();
 };
 
