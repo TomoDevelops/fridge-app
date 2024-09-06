@@ -3,8 +3,9 @@ import { supabase } from "~/server/utils/supabase";
 
 export default defineEventHandler(async (event) => {
   const { email, password } = await readBody(event);
-  const { isValid, userId } = await validateUser(email, password);
-  if (isValid) {
+  const userId = await createUser(email, password);
+
+  if (userId) {
     const sessionId = await createSession(userId);
     return {
       status: 200,
@@ -17,22 +18,21 @@ export default defineEventHandler(async (event) => {
   };
 });
 
-const validateUser = async (email: string, password: string) => {
-  const user = await supabase
+const createUser = async (email: string, password: string) => {
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  const userId = await supabase
     .from("users")
-    .select()
-    .eq("email_address", email)
-    .single();
+    .insert({
+      email_address: email,
+      password: hashedPassword,
+    })
+    .select("user_id")
+    .single()
+    .then((user) => user.data?.user_id);
+  console.log(userId);
 
-  if (user.data !== null) {
-    const dbPassword = user.data.password;
-    const isValid = await bcrypt.compare(password, dbPassword);
-    const userId = user.data.user_id;
-
-    return { isValid, userId };
-  }
-
-  return { isValid: false, userId: null };
+  return userId;
 };
 
 const createSession = async (userId: number) => {
