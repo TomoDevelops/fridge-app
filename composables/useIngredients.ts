@@ -1,9 +1,5 @@
-export const useIngredients = async (userId: number) => {
-  const { data } = await useFetch("/api/ingredients", {
-    query: {
-      userId,
-    },
-  });
+export const useIngredients = async () => {
+  const { data } = await useFetch("/api/ingredients");
 
   const fetchedIngredients = data.value?.ingredients;
 

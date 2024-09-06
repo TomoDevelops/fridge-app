@@ -1,8 +1,9 @@
 import { supabase } from "~/server/utils/supabase";
+import { getUserId } from "../utils/getUserId";
 
 export default defineEventHandler(async (event) => {
-  const query = getQuery(event);
-  const userId = query.userId;
+  const cookie = parseCookies(event);
+  const userId = await getUserId(cookie);
 
   try {
     const ingredients = await supabase

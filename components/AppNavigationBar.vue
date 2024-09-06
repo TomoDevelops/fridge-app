@@ -50,34 +50,76 @@
 <script setup lang="ts">
 const { isDesktop, isMobileOrTablet } = useDevice();
 const isOpen = ref(false);
+const isLoggedIn = ref(false);
+const { sessionCookie } = useSession();
 
-const links = [
-  {
-    label: "食材リスト",
-    to: "/",
-    click: isMobileOrTablet
-      ? () => {
-          isOpen.value = false;
-        }
-      : undefined,
+const signOut = async () => {
+  await $fetch("/api/signout", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      sessionId: sessionCookie.value,
+    }),
+  });
+
+  sessionCookie.value = null;
+  isOpen.value = false;
+
+  return navigateTo("/signin");
+};
+
+const links = ref([
+  [
+    {
+      label: "食材リスト",
+      to: "/",
+      click: isMobileOrTablet
+        ? () => {
+            isOpen.value = false;
+          }
+        : undefined,
+    },
+    {
+      label: "レシピ",
+      to: "/recipe",
+      click: isMobileOrTablet
+        ? () => {
+            isOpen.value = false;
+          }
+        : undefined,
+    },
+    {
+      label: "Settings",
+      to: "/settings",
+      click: isMobileOrTablet
+        ? () => {
+            isOpen.value = false;
+          }
+        : undefined,
+    },
+  ],
+]);
+
+watch(
+  sessionCookie,
+  () => {
+    isLoggedIn.value = !isLoggedIn.value;
+
+    if (isLoggedIn.value) {
+      links.value.push([
+        {
+          label: "ログアウト",
+          icon: "i-heroicons-arrow-left-start-on-rectangle",
+          click: signOut,
+        },
+      ]);
+    }
+    if (!isLoggedIn.value) {
+      links.value.pop();
+    }
   },
-  {
-    label: "レシピ",
-    to: "/recipe",
-    click: isMobileOrTablet
-      ? () => {
-          isOpen.value = false;
-        }
-      : undefined,
-  },
-  {
-    label: "Settings",
-    to: "/settings",
-    click: isMobileOrTablet
-      ? () => {
-          isOpen.value = false;
-        }
-      : undefined,
-  },
-];
+  { immediate: true },
+);
 </script>
