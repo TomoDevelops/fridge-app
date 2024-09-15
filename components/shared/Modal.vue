@@ -31,7 +31,7 @@
         </div>
       </template>
       <slot />
-      <template #footer>
+      <template v-if="props.useFooter" #footer>
         <UButton
           type="submit"
           size="lg"
@@ -54,9 +54,15 @@ interface ModalProps {
   isOpen: boolean;
   modalButtonText: string;
   headerTitle?: string;
+  useFooter?: boolean | false;
 }
 
-const props = defineProps<ModalProps>();
+const props = withDefaults(defineProps<ModalProps>(), {
+  isOpen: false,
+  modalButtonText: "閉じる",
+  headerTitle: undefined,
+  useFooter: true,
+});
 
 const emit = defineEmits(["closeModal", "submit"]);
 
