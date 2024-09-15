@@ -17,7 +17,10 @@
       }"
     >
       <template #header>
-        <div class="flex items-center justify-end">
+        <div
+          :class="`flex items-center justify-${props.headerTitle ? 'between' : 'end'}`"
+        >
+          <h3>{{ props.headerTitle }}</h3>
           <UButton
             color="white"
             variant="ghost"
@@ -50,6 +53,7 @@
 interface ModalProps {
   isOpen: boolean;
   modalButtonText: string;
+  headerTitle?: string;
 }
 
 const props = defineProps<ModalProps>();
