@@ -18,6 +18,7 @@
     "@types/bcrypt": "^5.0.2",
     "bcrypt": "^5.1.1",
     "nuxt": "^3.13.0",
+    "openai": "^4.58.2",
     "vue": "latest",
     "zod": "^3.23.8"
   },
