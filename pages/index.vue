@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <main class="px-2">
     <div>
       <UTable
         v-model="selectedIngredient"
@@ -62,7 +62,7 @@
         </div>
       </UForm>
     </Modal>
-  </div>
+  </main>
 </template>
 
 <script setup lang="ts">
@@ -105,7 +105,11 @@ const onSubmit = async () => {
     },
   });
 
-  ingredients.value = data.ingredients;
+  if (data?.ingredients === null || data?.ingredients === undefined) {
+    return;
+  }
+
+  ingredients.value = JSON.parse(JSON.stringify(data.ingredients));
 
   Object.assign(state, {
     ingredient: undefined,
