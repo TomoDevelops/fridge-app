@@ -70,7 +70,7 @@ const signOut = async () => {
   return navigateTo("/signin");
 };
 
-const links = ref([
+const links = ref<[NuxtUiLink[]]>([
   [
     {
       label: "食材リスト",
