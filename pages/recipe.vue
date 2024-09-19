@@ -1,5 +1,5 @@
 <template>
-  <main class="px-2">
+  <div>
     <div
       v-if="hasNoIngredients"
       class="flex flex-col items-center justify-center gap-3 py-6"
@@ -17,7 +17,7 @@
     </div>
 
     <template v-else>
-      <div class="flex flex-col gap-4">
+      <div class="mt-4 flex flex-col gap-4">
         <UCard
           v-for="recipe in recipes"
           :key="recipe.recipeName"
@@ -75,8 +75,14 @@
           </li>
         </ol>
       </Modal>
+      <button
+        class="bg-primary fixed bottom-4 right-4 grid h-16 w-16 place-items-center rounded-full"
+        @click="generateRecipe"
+      >
+        <UIcon name="i-arcticons-recipe-keeper" class="h-10 w-10" />
+      </button>
     </template>
-  </main>
+  </div>
 </template>
 
 <script setup lang="ts">
