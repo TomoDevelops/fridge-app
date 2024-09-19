@@ -1,5 +1,5 @@
 <template>
-  <main class="px-2">
+  <div>
     <div>
       <UTable
         v-model="selectedIngredient"
@@ -30,12 +30,6 @@
         />
       </div>
     </div>
-    <button
-      class="bg-primary fixed bottom-4 right-4 grid h-16 w-16 place-items-center rounded-full"
-      @click="isOpen = true"
-    >
-      <UIcon name="i-heroicons-plus" class="h-10 w-10" />
-    </button>
     <Modal
       :is-open="isOpen"
       modal-button-text="食材を保存する"
@@ -62,7 +56,13 @@
         </div>
       </UForm>
     </Modal>
-  </main>
+    <button
+      class="bg-primary fixed bottom-4 right-4 grid h-16 w-16 place-items-center rounded-full"
+      @click="isOpen = true"
+    >
+      <UIcon name="i-heroicons-plus" class="h-10 w-10" />
+    </button>
+  </div>
 </template>
 
 <script setup lang="ts">
