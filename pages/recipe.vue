@@ -1,11 +1,19 @@
 <template>
   <main class="px-2">
     <div
-      v-if="!recipes?.length"
+      v-if="hasNoIngredients"
       class="flex flex-col items-center justify-center gap-3 py-6"
     >
       <span class="text-sm italic">食材リストが空です。</span>
       <UButton to="/">食材を追加してください</UButton>
+    </div>
+
+    <div
+      v-if="!recipes?.length && !hasNoIngredients"
+      class="flex flex-col items-center justify-center gap-3 py-6"
+    >
+      <span class="text-sm italic">レシピを新しく生成する必要があります。</span>
+      <UButton @click="generateRecipe">レシピを生成</UButton>
     </div>
 
     <template v-else>
@@ -33,10 +41,9 @@
         fullscreen
         :is-open="isOpen"
         :header-title="selectedRecipe?.recipeName"
-        :use-footer="false"
-        modal-button-text="閉じる"
+        modal-button-text="レシピを削除する"
         @close-modal="isOpen = false"
-        @submit="isOpen = false"
+        @submit="deleteRecipe"
       >
         <h4
           class="text-primary decoration-primary mb-4 underline decoration-wavy underline-offset-8"
@@ -76,12 +83,32 @@
 // Components
 import Modal from "~/components/shared/Modal.vue";
 
-const recipes = ref<Recipe[] | undefined>(await useRecipe());
+const { fetchedRecipe, noIngredients } = await useRecipe();
+const recipes = ref<Recipe[] | undefined>(fetchedRecipe);
+const hasNoIngredients = ref<boolean | undefined>(noIngredients);
 const selectedRecipe = ref<Recipe>();
 const isOpen = ref(false);
 
 const openRecipeModal = (data: Recipe) => {
   selectedRecipe.value = data;
   isOpen.value = true;
+};
+
+const deleteRecipe = async () => {
+  await $fetch("/api/recipe", {
+    method: "DELETE",
+    query: {
+      recipeId: selectedRecipe.value?.recipeId,
+    },
+  });
+
+  isOpen.value = false;
+  const { fetchedRecipe } = await useRecipe();
+  recipes.value = fetchedRecipe;
+};
+
+const generateRecipe = async () => {
+  const { fetchedRecipe } = await useRecipe(true);
+  recipes.value = fetchedRecipe;
 };
 </script>
