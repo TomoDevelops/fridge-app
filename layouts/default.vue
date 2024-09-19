@@ -1,9 +1,9 @@
 <template>
   <div class="min-h-screen lg:flex">
-    <AppNavigationBar />
+    <AppHeader />
     <main class="min-h-screen px-2">
       <slot />
     </main>
-    <h1>Footer</h1>
+    <AppFooter />
   </div>
 </template>
