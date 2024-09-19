@@ -12,7 +12,6 @@ export default defineEventHandler(async (event) => {
   let recipes: Recipe[] = [];
 
   recipes = await getRecipes(userId);
-
   const ingredients = await getIngredients(userId);
 
   if (ingredients.length === 0) {
