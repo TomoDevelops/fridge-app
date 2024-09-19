@@ -1,7 +1,7 @@
 <template>
   <UModal
     :model-value="props.isOpen"
-    :ui="{ container: 'items-center rounded-lg' }"
+    :ui="{ container: 'items-start rounded-lg' }"
   >
     <UCard
       :ui="{
