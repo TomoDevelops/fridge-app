@@ -30,12 +30,6 @@
         />
       </div>
     </div>
-    <button
-      class="bg-primary fixed bottom-4 right-4 grid h-16 w-16 place-items-center rounded-full"
-      @click="isOpen = true"
-    >
-      <UIcon name="i-heroicons-plus" class="h-10 w-10" />
-    </button>
     <Modal
       :is-open="isOpen"
       modal-button-text="食材を保存する"
@@ -62,6 +56,12 @@
         </div>
       </UForm>
     </Modal>
+    <button
+      class="bg-primary fixed bottom-4 right-4 grid h-16 w-16 place-items-center rounded-full"
+      @click="isOpen = true"
+    >
+      <UIcon name="i-heroicons-plus" class="h-10 w-10" />
+    </button>
   </div>
 </template>
 
@@ -105,7 +105,11 @@ const onSubmit = async () => {
     },
   });
 
-  ingredients.value = data.ingredients;
+  if (data?.ingredients === null || data?.ingredients === undefined) {
+    return;
+  }
+
+  ingredients.value = JSON.parse(JSON.stringify(data.ingredients));
 
   Object.assign(state, {
     ingredient: undefined,

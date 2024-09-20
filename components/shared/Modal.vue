@@ -1,7 +1,7 @@
 <template>
   <UModal
     :model-value="props.isOpen"
-    :ui="{ container: 'items-center rounded-lg' }"
+    :ui="{ container: 'items-start rounded-lg' }"
   >
     <UCard
       :ui="{
@@ -17,7 +17,10 @@
       }"
     >
       <template #header>
-        <div class="flex items-center justify-end">
+        <div
+          :class="`flex items-center justify-${props.headerTitle ? 'between' : 'end'}`"
+        >
+          <h3>{{ props.headerTitle }}</h3>
           <UButton
             color="white"
             variant="ghost"
@@ -28,7 +31,7 @@
         </div>
       </template>
       <slot />
-      <template #footer>
+      <template v-if="props.useFooter" #footer>
         <UButton
           type="submit"
           size="lg"
@@ -50,9 +53,16 @@
 interface ModalProps {
   isOpen: boolean;
   modalButtonText: string;
+  headerTitle?: string;
+  useFooter?: boolean | false;
 }
 
-const props = defineProps<ModalProps>();
+const props = withDefaults(defineProps<ModalProps>(), {
+  isOpen: false,
+  modalButtonText: "閉じる",
+  headerTitle: undefined,
+  useFooter: true,
+});
 
 const emit = defineEmits(["closeModal", "submit"]);
 

@@ -6,6 +6,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     supabaseUrl: "",
     supabaseKey: "",
+    openaiApiKey: "",
     public: {
       supabaseUrl: "",
       supabaseKey: "",
