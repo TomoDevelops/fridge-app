@@ -17,6 +17,12 @@
     </div>
 
     <template v-else>
+      <UAlert
+        icon="i-material-symbols-notifications-active-outline"
+        color="primary"
+        variant="solid"
+        description="You can add components to your app using the cli."
+      />
       <div class="mt-4 flex flex-col gap-4">
         <UCard
           v-for="recipe in recipes"

@@ -8,23 +8,25 @@ export default defineEventHandler(async (event) => {
   const userId = await getUserId(cookie);
   const query = getQuery(event);
   const fetchNewRecipes = query.fetchNewRecipes === "true";
+  await useGenerationToken(userId);
 
-  let recipes: Recipe[] = [];
+  // let recipes: Recipe[] = [];
 
-  recipes = await getRecipes(userId);
-  const ingredients = await getIngredients(userId);
+  // recipes = await getRecipes(userId);
+  // const ingredients = await getIngredients(userId);
 
-  if (ingredients.length === 0) {
-    return { recipes: [], noIngredients: true };
-  }
+  // if (ingredients.length === 0) {
+  //   return { recipes: [], noIngredients: true };
+  // }
 
-  if (recipes.length === 0 || fetchNewRecipes) {
-    const generatedRecipes = await generateRecipes(ingredients, recipes);
-    await saveRecipes(userId, generatedRecipes);
-    recipes.push(...generatedRecipes);
-  }
+  // if (recipes.length === 0 || fetchNewRecipes) {
+  //   const generatedRecipes = await generateRecipes(ingredients, recipes);
+  //   await saveRecipes(userId, generatedRecipes);
+  //   await useGenerationToken(userId);
+  //   recipes.push(...generatedRecipes);
+  // }
 
-  return { recipes, noIngredients: false };
+  // return { recipes, noIngredients: false };
 });
 
 const getIngredients = async (userId: number): Promise<Ingredient[]> => {
@@ -110,4 +112,12 @@ const saveRecipes = async (userId: number, recipes: Recipe[]) => {
       method: recipe.method,
     });
   }
+};
+
+const useGenerationToken = async (userId: number) => {
+  console.log("decrement");
+  const data = await supabase.rpc("decrementGenerationToken", {
+    user_id: userId,
+  });
+  console.log(data);
 };
